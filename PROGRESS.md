@@ -10,3 +10,11 @@
 2372055 - Bryant Marvel Lim: create & setup project (Fullstack menggunakan Next.JS)<br />
 2372061 - Laura Puspa Ameliana:  <br />
 2372068 - Indri Mahalani Simamora: Sudah mendapatkan referensi design & membuat database draft <br />
+
+
+13 Oct 2025 - 17 Oct 2025
+
+2372055 - Bryant Marvel Lim: setup prisma & database di project + bantu perbaiki database<br />
+2372061 - Laura Puspa Ameliana: Melakukan perbaikan pada database <br />
+2372068 - Indri Mahalani Simamora: Membuat wireframe design di Figma untuk sisi pengguna <br />
+Catatan: Sejauh ini tidak ada kendala, dan semuanya berjalan dengan lancar. Setelah selesai membuat wireframe, progress selanjutnya adalah untuk membuat design final dan bersiap untuk mengaplikasikannya ke kode
