@@ -1,0 +1,67 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model users {
+  id               Int       @id @default(autoincrement())
+  name             String
+  email            String    @unique
+  password         String
+  role             String?
+  phone            String?
+  address          String?
+  join_date        DateTime?
+  points           Int        @default(0)
+  membership_level String?
+  status           String?    @default("active")
+  created_at       DateTime   @default(now())
+
+  transactions     transactions[]
+  rewards          rewards[]
+  membership_logs  membership_logs[]
+}
+
+model transactions {
+  id                Int       @id @default(autoincrement())
+  total_item        Int
+  total_transaction Decimal    @db.Decimal(10,2)
+  items             String?
+  points_gained     Int
+  created_at        DateTime   @default(now())
+
+  users_id          Int
+  user              users      @relation(fields: [users_id], references: [id])
+}
+
+model rewards {
+  id               Int       @id @default(autoincrement())
+  reward_name      String
+  points_required  Int
+  redeemed_at      DateTime?
+  status           String?    @default("available")
+  code             String?
+  created_at       DateTime   @default(now())
+
+  users_id         Int
+  user             users      @relation(fields: [users_id], references: [id])
+}
+
+model membership_logs {
+  id               Int       @id @default(autoincrement())
+  activity         String
+  activity_time    DateTime   @default(now())
+
+  users_id         Int
+  user             users      @relation(fields: [users_id], references: [id])
+}
