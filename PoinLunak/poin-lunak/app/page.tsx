@@ -1,103 +1,96 @@
-import Image from "next/image";
+// Home / Landing Page
 
-export default function Home() {
+import Link from 'next/link';
+import { redirect } from 'next/navigation';
+import { getCurrentUser } from '@/lib/auth';
+
+export default async function HomePage() {
+  // Check if user is already logged in
+  const currentUser = await getCurrentUser();
+  
+  if (currentUser) {
+    if (currentUser.role === 'ADMIN') {
+      redirect('/admin/dashboard');
+    } else {
+      redirect('/member/dashboard');
+    }
+  }
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+    <div className="min-h-screen bg-gradient-to-br from-[#DDBA72] via-[#c9a860] to-[#000000]">
+      {/* Hero Section */}
+      <div className="flex flex-col items-center justify-center min-h-screen text-white px-4">
+        <div className="text-center max-w-4xl">
+          <div className="text-9xl mb-6 animate-bounce">
+            <img
+              src="/logo-poin-lunak.png"
+              // alt="Logo Poin Lunak"
+              width={128} // Set width in pixels
+              height={128} // Set height in pixels
+              className="mx-auto"
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+          </div>
+          <h1 className="text-6xl font-bold mb-4 drop-shadow-lg">
+            Poin Lunak
+          </h1>
+          <p className="text-2xl mb-3 text-[#6B3E1D] font-semibold">
+            Ayam Goreng Tulang Lunak Holis Surya Sumantri
+          </p>
+          <p className="text-xl mb-12 opacity-90">
+            Sistem Membership untuk Pelanggan Setia
+          </p>
+
+          {/* Features */}
+          {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <div className="bg-white/10 backdrop-blur-sm p-6 rounded-xl">
+              <div className="text-5xl mb-3">💰</div>
+              <h3 className="font-bold text-lg mb-2">Kumpulkan Poin</h3>
+              <p className="text-sm opacity-90">
+                Setiap Rp 1.000 = 1 Poin
+              </p>
+            </div>
+            <div className="bg-white/10 backdrop-blur-sm p-6 rounded-xl">
+              <div className="text-5xl mb-3">🎁</div>
+              <h3 className="font-bold text-lg mb-2">Tukar Reward</h3>
+              <p className="text-sm opacity-90">
+                Diskon & Voucher Gratis
+              </p>
+            </div>
+            <div className="bg-white/10 backdrop-blur-sm p-6 rounded-xl">
+              <div className="text-5xl mb-3">⭐</div>
+              <h3 className="font-bold text-lg mb-2">Level Member</h3>
+              <p className="text-sm opacity-90">
+                Bronze, Silver, Gold
+              </p>
+            </div>
+          </div> */}
+
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              href="/register"
+              className="bg-[#6B3E1D] hover:bg-[#5a3318] text-white font-bold py-4 px-8 rounded-lg text-lg transition-all shadow-lg hover:scale-105"
+            >
+              Daftar Sekarang
+            </Link>
+            <Link
+              href="/login"
+              className="bg-white text-[#6B3E1D] hover:bg-gray-100 font-bold py-4 px-8 rounded-lg text-lg transition-all shadow-lg hover:scale-105"
+            >
+              Login
+            </Link>
+          </div>
+
+          {/* Footer Info */}
+          <div></div>
+          <div className="mt-16 text-sm opacity-75">
+            <p>© 2025 Poin Lunak. All rights reserved.</p>
+            <p className="mt-2">
+              Pemrograman Terapan - Universitas Kristen Maranatha
+            </p>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </div>
     </div>
   );
 }
