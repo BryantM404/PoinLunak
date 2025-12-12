@@ -44,6 +44,6 @@ Catatan: Revisi berjalan lancar tanpa kendala berarti.
 -> 8 Dec 2025 - 12 Dec 2025
 
 2372055 - Bryant Marvel Lim: Menambahkan fitur kelola users untuk admin sehingga dapat melakukan insert, update, dan delete users
-2372061 - Laura Puspa Ameliana: 
-2372068 - Indri Mahalani Simamora: 
-Catatan: 
+2372061 - Laura Puspa Ameliana: Pengerjaan fitur redeem agar terhubung dengan poin member 
+2372068 - Indri Mahalani Simamora: Memperbaiki UI website (tombol, color palette website, tulisan) agar lebih menyatu
+Catatan: Tidak ada kendala dan masih berjalan dengan lancar
