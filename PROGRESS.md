@@ -40,3 +40,10 @@ Catatan: Web/app berhasil selesai dan bisa login/register + liat dashboard masin
 2372061 - Laura Puspa Ameliana: Melakukan revisi hasil evaluasi 28 Nov (menghapus nomor HP & alamat) serta penyesuaian logika registrasi.
 2372068 - Indri Mahalani Simamora: Menyempurnakan tampilan dashboard member sesuai perubahan fitur dan kebutuhan baru.
 Catatan: Revisi berjalan lancar tanpa kendala berarti.
+
+-> 8 Dec 2025 - 12 Dec 2025
+
+2372055 - Bryant Marvel Lim: Menambahkan fitur kelola users untuk admin sehingga dapat melakukan insert, update, dan delete users
+2372061 - Laura Puspa Ameliana: 
+2372068 - Indri Mahalani Simamora: 
+Catatan: 
