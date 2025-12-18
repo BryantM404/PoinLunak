@@ -24,7 +24,7 @@ export async function GET() {
     }
 
     // Get total users
-    const totalUsers = await prisma.users.count()
+    const totalUsers = await prisma.users.count();
 
     // Get total transactions
     const totalTransactions = await prisma.transactions.count();
@@ -63,7 +63,7 @@ export async function GET() {
     });
 
     // Format transactions per day
-    const transactionsPerDay = transactionsByDay.map((t: { created_at: { toISOString: () => string; }; _count: { id: any; }; _sum: { total_transaction: any; }; }) => ({
+    const transactionsPerDay = transactionsByDay.map(t => ({
       date: t.created_at.toISOString().split('T')[0],
       count: t._count.id,
       amount: Number(t._sum.total_transaction || 0),
@@ -97,7 +97,7 @@ export async function GET() {
     // Combine points data
     const dateMap = new Map<string, { issued: number; redeemed: number }>();
 
-    pointsIssuedByDay.forEach((p: { created_at: { toISOString: () => string; }; _sum: { points_gained: any; }; }) => {
+    pointsIssuedByDay.forEach(p => {
       const date = p.created_at.toISOString().split('T')[0];
       const current = dateMap.get(date) || { issued: 0, redeemed: 0 };
       dateMap.set(date, {
@@ -106,7 +106,7 @@ export async function GET() {
       });
     });
 
-    pointsRedeemedByDay.forEach((p: { created_at: { toISOString: () => string; }; _sum: { points_required: any; }; }) => {
+    pointsRedeemedByDay.forEach(p => {
       const date = p.created_at.toISOString().split('T')[0];
       const current = dateMap.get(date) || { issued: 0, redeemed: 0 };
       dateMap.set(date, {
