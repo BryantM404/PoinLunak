@@ -209,41 +209,7 @@ export default function AdminDashboardClient() {
             </CardContent>
           </Card>
         </div>
-
-        {/* Quick Actions */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Aksi Cepat</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Button
-                variant="primary"
-                className="w-full py-6"
-                onClick={() => router.push('/admin/transactions/new')}
-              >
-                ➕ Tambah Transaksi Baru
-              </Button>
-              <Button
-                variant="secondary"
-                className="w-full py-6"
-                onClick={() => setShowAdjustModal(true)}
-              >
-                ⚙️ Sesuaikan Poin Manual
-              </Button>
-              <Button
-                variant="outline"
-                className="w-full py-6"
-                onClick={() => router.push('/admin/reports')}
-              >
-                📊 Lihat Laporan
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
       </main>
-
-      {/* Point Adjustment Modal */}
       {showAdjustModal && (
         <PointAdjustmentModal onClose={() => setShowAdjustModal(false)} />
       )}
@@ -251,7 +217,6 @@ export default function AdminDashboardClient() {
   );
 }
 
-// Point Adjustment Modal Component
 function PointAdjustmentModal({ onClose }: { onClose: () => void }) {
   const [userId, setUserId] = useState('');
   const [points, setPoints] = useState('');

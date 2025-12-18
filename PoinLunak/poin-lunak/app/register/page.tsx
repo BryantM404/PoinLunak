@@ -1,5 +1,3 @@
-// Register Page
-
 'use client';
 
 import { useState } from 'react';
@@ -15,8 +13,7 @@ export default function RegisterPage() {
     name: '',
     email: '',
     password: '',
-    phone: '',
-    address: '',
+    confirmPassword: '',
   });
   const [loading, setLoading] = useState(false);
 
@@ -31,6 +28,18 @@ export default function RegisterPage() {
     e.preventDefault();
     setLoading(true);
 
+    if (formData.password !== formData.confirmPassword) {
+      toast.error("Password dan konfirmasi password tidak sama!");
+      setLoading(false);
+      return;
+    }
+
+    if (formData.password.length < 6) {
+      toast.error("Password minimal 6 karakter");
+      setLoading(false);
+      return;
+    }
+
     try {
       const response = await fetch('/api/auth/register', {
         method: 'POST',
@@ -41,7 +50,7 @@ export default function RegisterPage() {
       const data = await response.json();
 
       if (data.success) {
-        toast.success('Registrasi berhasil! 🎉');
+        toast.success('Registrasi berhasil!');
         router.push('/member/dashboard');
       } else {
         toast.error(data.error || 'Registrasi gagal');
@@ -55,13 +64,20 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#DDBA72] to-[#6B3E1D] p-4">
+    <div className="min-h-screen flex items-center text-black justify-center bg-gradient-to-br from-[#DDBA72] to-[#6B3E1D] p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
           <div className="text-center mb-4">
-            <div className="text-6xl mb-4">🍗</div>
+            <div className="text-6xl mb-4">
+              <img
+              src="/logo-poin-lunak.png"
+              width={128}
+              height={128} 
+              className="mx-auto"
+            />
+            </div>
             <CardTitle className="text-3xl">Daftar Member</CardTitle>
-            <p className="text-gray-600 mt-2">Poin Lunak Membership</p>
+            <p className="text-black mt-2">Poin Lunak Membership</p>
           </div>
         </CardHeader>
         <CardContent>
@@ -94,26 +110,14 @@ export default function RegisterPage() {
               required
             />
             <Input
-              type="tel"
-              name="phone"
-              label="Nomor HP (Opsional)"
-              value={formData.phone}
+              type="password"
+              name="confirmPassword"
+              label="Konfirmasi Password"
+              value={formData.confirmPassword}
               onChange={handleChange}
-              placeholder="081234567890"
+              placeholder="Ulangi Password"
+              required
             />
-            <div>
-              <label className="block text-sm font-medium text-[#6B3E1D] mb-1">
-                Alamat (Opsional)
-              </label>
-              <textarea
-                name="address"
-                value={formData.address}
-                onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#DDBA72] focus:border-transparent"
-                rows={3}
-                placeholder="Alamat lengkap"
-              />
-            </div>
             <Button
               type="submit"
               variant="primary"
@@ -125,7 +129,7 @@ export default function RegisterPage() {
           </form>
 
           <div className="mt-6 text-center">
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-black">
               Sudah punya akun?{' '}
               <button
                 onClick={() => router.push('/login')}
