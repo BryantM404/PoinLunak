@@ -82,28 +82,16 @@ export default function AdminDashboardClient() {
       <header className="bg-[#6B3E1D] text-white py-4 px-6 shadow-md">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <h1 className="text-2xl font-bold">Dashboard Admin - Poin Lunak</h1>
-          
-          <div className="flex gap-3 items-center">
-              <Button 
-              variant="outline" 
-              onClick={() => router.push('/admin/users')}
-              className="bg-blue-500 text-white border-transparent hover:bg-blue-600 hover:text-white"
-            >
-              Kelola Users
+          <div className="flex gap-3">
+            <Button variant="outline" onClick={() => router.push('/admin/users')}>
+              👥 Kelola User
             </Button>
-
-            <Button 
-              variant="outline" 
-              onClick={() => router.push('/admin/transactions')}
-              className="bg-emerald-500 text-white border-transparent hover:bg-emerald-600 hover:text-white"
-            >
-              Transaksi
+            <Button variant="outline" onClick={() => router.push('/admin/transactions')}>
+              💳 Transaksi
             </Button>
-
             <Button variant="danger" onClick={handleLogout}>
               Logout
             </Button>
-            
           </div>
         </div>
       </header>
@@ -114,7 +102,7 @@ export default function AdminDashboardClient() {
           <Card>
             <CardContent className="pt-6">
               <div className="text-center">
-                <p className="text-gray-600 text-sm">Total Users</p>
+                <p className="text-gray-600 text-sm">Total User</p>
                 <p className="text-3xl font-bold text-[#6B3E1D]">
                   {stats.totalUsers}
                 </p>

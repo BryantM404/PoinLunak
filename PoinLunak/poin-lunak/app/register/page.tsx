@@ -1,5 +1,3 @@
-// Register Page
-
 'use client';
 
 import { useState } from 'react';

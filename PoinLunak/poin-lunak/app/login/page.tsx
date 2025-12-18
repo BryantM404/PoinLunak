@@ -56,9 +56,8 @@ export default function LoginPage() {
             <div className="text-6xl mb-4">
               <img
               src="/logo-poin-lunak.png"
-              // alt="Logo Poin Lunak"
-              width={128} // Set width in pixels
-              height={128} // Set height in pixels
+              width={128} 
+              height={128}
               className="mx-auto"
             /></div>
             <CardTitle className="text-3xl">Poin Lunak</CardTitle>
