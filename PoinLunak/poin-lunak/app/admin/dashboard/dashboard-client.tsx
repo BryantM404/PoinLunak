@@ -83,11 +83,18 @@ export default function AdminDashboardClient() {
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <h1 className="text-2xl font-bold">Dashboard Admin - Poin Lunak</h1>
           <div className="flex gap-3">
-            <Button variant="outline" onClick={() => router.push('/admin/users')}>
-              👥 Kelola User
+            <Button
+              className="bg-[#8B5A2B] hover:bg-[#A66A3F] text-white border-none"
+              onClick={() => router.push('/admin/users')}
+            >
+              Kelola User
             </Button>
-            <Button variant="outline" onClick={() => router.push('/admin/transactions')}>
-              💳 Transaksi
+
+            <Button
+              className="bg-[#8B5A2B] hover:bg-[#A66A3F] text-white border-none"
+              onClick={() => router.push('/admin/transactions')}
+            >
+              Transaksi
             </Button>
             <Button variant="danger" onClick={handleLogout}>
               Logout
@@ -209,6 +216,28 @@ export default function AdminDashboardClient() {
             </CardContent>
           </Card>
         </div>
+        <Card>
+          <CardHeader>
+            <CardTitle>Pengaturan Rasio Poin</CardTitle>
+          </CardHeader>
+          <CardContent className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-600">
+                Rasio poin per transaksi
+              </p>
+              <p className="text-2xl font-bold text-[#6B3E1D]">
+                {/* {stats.pointRatio} */}
+              </p>
+            </div>
+
+            <Button
+              className="bg-[#8B5A2B] hover:bg-[#A66A3F] text-white"
+              onClick={() => router.push('/admin/point-ratio')}
+            >
+              Ubah Rasio
+            </Button>
+          </CardContent>
+        </Card>
       </main>
       {showAdjustModal && (
         <PointAdjustmentModal onClose={() => setShowAdjustModal(false)} />

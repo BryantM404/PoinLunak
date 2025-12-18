@@ -121,9 +121,16 @@ export async function GET() {
       redeemed: data.redeemed,
     }));
 
+    const pointRatio =
+    pointsRedeemed._sum.points_required && pointsIssued._sum.points_gained
+    ? pointsRedeemed._sum.points_required / pointsIssued._sum.points_gained
+    : 0;
+
+
     const stats: AdminStats = {
       totalUsers,
       totalTransactions,
+      pointRatio,
       totalPointsIssued: pointsIssued._sum.points_gained || 0,
       totalPointsRedeemed: pointsRedeemed._sum.points_required || 0,
       transactionsPerDay,

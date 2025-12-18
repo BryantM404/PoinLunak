@@ -73,6 +73,7 @@ export interface RegisterData {
 // Dashboard Stats types
 export interface AdminStats {
   totalUsers: number;
+  pointRatio: number;
   totalTransactions: number;
   totalPointsIssued: number;
   totalPointsRedeemed: number;
