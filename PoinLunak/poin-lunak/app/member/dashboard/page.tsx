@@ -20,11 +20,8 @@ export default async function MemberDashboardPage() {
       name: true,
       email: true,
       role: true,
-      phone: true,
-      address: true,
       join_date: true,
       points: true,
-      membership_level: true,
       status: true,
       created_at: true,
     },
@@ -47,11 +44,32 @@ export default async function MemberDashboardPage() {
     orderBy: { created_at: 'desc' },
   });
 
+  // Convert Decimal types to numbers for client serialization
+  const serializedTransactions = recentTransactions.map(tx => ({
+    ...tx,
+    total_transaction: Number(tx.total_transaction),
+    points_gained: Number(tx.points_gained),
+    created_at: tx.created_at.toISOString(),
+  }));
+
+  const serializedRewards = redeemedRewards.map(reward => ({
+    ...reward,
+    points_required: Number(reward.points_required),
+    created_at: reward.created_at.toISOString(),
+    redeemed_at: reward.redeemed_at ? reward.redeemed_at.toISOString() : null,
+  }));
+
+  const serializedUser = {
+    ...userData,
+    join_date: userData.join_date?.toISOString() || null,
+    created_at: userData.created_at.toISOString(),
+  };
+
   return (
     <MemberDashboardClient
-      user={userData}
-      transactions={recentTransactions}
-      rewards={redeemedRewards}
+      user={serializedUser}
+      transactions={serializedTransactions}
+      rewards={serializedRewards}
     />
   );
 }

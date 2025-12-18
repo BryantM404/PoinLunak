@@ -17,11 +17,19 @@ export default async function HomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#DDBA72] via-[#c9a860] to-[#6B3E1D]">
+    <div className="min-h-screen bg-gradient-to-br from-[#DDBA72] via-[#c9a860] to-[#000000]">
       {/* Hero Section */}
       <div className="flex flex-col items-center justify-center min-h-screen text-white px-4">
         <div className="text-center max-w-4xl">
-          <div className="text-9xl mb-6 animate-bounce">🍗</div>
+          <div className="text-9xl mb-6 animate-bounce">
+            <img
+              src="/logo-poin-lunak.png"
+              // alt="Logo Poin Lunak"
+              width={128} // Set width in pixels
+              height={128} // Set height in pixels
+              className="mx-auto"
+            />
+          </div>
           <h1 className="text-6xl font-bold mb-4 drop-shadow-lg">
             Poin Lunak
           </h1>
@@ -33,7 +41,7 @@ export default async function HomePage() {
           </p>
 
           {/* Features */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
             <div className="bg-white/10 backdrop-blur-sm p-6 rounded-xl">
               <div className="text-5xl mb-3">💰</div>
               <h3 className="font-bold text-lg mb-2">Kumpulkan Poin</h3>
@@ -55,7 +63,7 @@ export default async function HomePage() {
                 Bronze, Silver, Gold
               </p>
             </div>
-          </div>
+          </div> */}
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -74,10 +82,11 @@ export default async function HomePage() {
           </div>
 
           {/* Footer Info */}
+          <div></div>
           <div className="mt-16 text-sm opacity-75">
-            <p>© 2024 Poin Lunak. All rights reserved.</p>
+            <p>© 2025 Poin Lunak. All rights reserved.</p>
             <p className="mt-2">
-              Proyek Rekayasa Perangkat Lunak - Universitas Kristen Maranatha
+              Pemrograman Terapan - Universitas Kristen Maranatha
             </p>
           </div>
         </div>

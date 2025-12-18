@@ -49,11 +49,17 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#DDBA72] to-[#6B3E1D] p-4">
+    <div className="min-h-screen text-black flex items-center justify-center bg-gradient-to-br from-[#DDBA72] to-[#6B3E1D] p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
           <div className="text-center mb-4">
-            <div className="text-6xl mb-4">🍗</div>
+            <div className="text-6xl mb-4">
+              <img
+              src="/logo-poin-lunak.png"
+              width={128} 
+              height={128}
+              className="mx-auto"
+            /></div>
             <CardTitle className="text-3xl">Poin Lunak</CardTitle>
             <p className="text-gray-600 mt-2">Membership System</p>
           </div>
