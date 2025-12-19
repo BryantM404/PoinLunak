@@ -238,6 +238,29 @@ export default function AdminDashboardClient() {
             </Button>
           </CardContent>
         </Card>
+        <Card>
+        <CardHeader>
+          <CardTitle>Voucher & Reward</CardTitle>
+        </CardHeader>
+
+        <CardContent className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div>
+            <p className="text-sm text-gray-600">
+              Kelola voucher dan reward yang dapat ditukar oleh member
+            </p>
+            <p className="text-xs text-gray-500 mt-1">
+              Tambah, edit, atau nonaktifkan voucher
+            </p>
+          </div>
+
+          <Button
+            className="bg-[#6B3E1D] hover:bg-[#8B5A2B] text-white"
+            onClick={() => router.push('/admin/voucher')}
+          >
+            Kelola Voucher
+          </Button>
+        </CardContent>
+      </Card>
       </main>
       {showAdjustModal && (
         <PointAdjustmentModal onClose={() => setShowAdjustModal(false)} />
