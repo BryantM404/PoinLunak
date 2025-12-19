@@ -51,6 +51,6 @@ Catatan: Tidak ada kendala dan masih berjalan dengan lancar
 -> 15 Dec 2025 - 19 Dec 2025
 
 2372055 - Bryant Marvel Lim: Menambahkan tampilan untuk ubah rasio dan kelola voucher untuk admin
-2372061 - Laura Puspa Ameliana: 
-2372068 - Indri Mahalani Simamora: 
+2372061 - Laura Puspa Ameliana: Menambah fitur member
+2372068 - Indri Mahalani Simamora: Melengkapi fitur member
 Catatan: Ada masalah untuk mengubah rasio poin, karena di database tidak menyimpan tabel dan kolom untuk rasio tersebut. Untuk solusi kedepannya, sepertinya perlu untuk diubah databasenya lagi.
