@@ -29,28 +29,28 @@ Catatan: Minggu ini tidak ada kendala juga, masih berjalan dengan lancar. Untuk 
 
 -> 27 Oct 2025 - 28 Nov 2025
 
-2372055 - Bryant Marvel Lim: Mengembangkan struktur awal aplikasi menggunakan React/TSX dan membangun halaman dashboard admin versi pertama.
-2372061 - Laura Puspa Ameliana: Finalisasi database dan memastikan seluruh model sesuai kebutuhan (login, register, dashboard).
-2372068 - Indri Mahalani Simamora: Membuat dan mengimplementasikan desain UI untuk homepage, login, register, dan dashboard member.
-Catatan: Web/app berhasil selesai dan bisa login/register + liat dashboard masing-masing role.
+2372055 - Bryant Marvel Lim: Mengembangkan struktur awal aplikasi menggunakan React/TSX dan membangun halaman dashboard admin versi pertama.<br />
+2372061 - Laura Puspa Ameliana: Finalisasi database dan memastikan seluruh model sesuai kebutuhan (login, register, dashboard).<br />
+2372068 - Indri Mahalani Simamora: Membuat dan mengimplementasikan desain UI untuk homepage, login, register, dan dashboard member.<br />
+Catatan: Web/app berhasil selesai dan bisa login/register + liat dashboard masing-masing role.<br />
 
 -> 1 Dec 2025 - 5 Dec 2025
 
-2372055 - Bryant Marvel Lim: Menambahkan komponen baru pada dashboard admin dan menyesuaikan alur setelah revisi registrasi.
-2372061 - Laura Puspa Ameliana: Melakukan revisi hasil evaluasi 28 Nov (menghapus nomor HP & alamat) serta penyesuaian logika registrasi.
-2372068 - Indri Mahalani Simamora: Menyempurnakan tampilan dashboard member sesuai perubahan fitur dan kebutuhan baru.
+2372055 - Bryant Marvel Lim: Menambahkan komponen baru pada dashboard admin dan menyesuaikan alur setelah revisi registrasi.<br />
+2372061 - Laura Puspa Ameliana: Melakukan revisi hasil evaluasi 28 Nov (menghapus nomor HP & alamat) serta penyesuaian logika registrasi.<br />
+2372068 - Indri Mahalani Simamora: Menyempurnakan tampilan dashboard member sesuai perubahan fitur dan kebutuhan baru.<br />
 Catatan: Revisi berjalan lancar tanpa kendala berarti.
 
 -> 8 Dec 2025 - 12 Dec 2025
 
-2372055 - Bryant Marvel Lim: Menambahkan fitur kelola users untuk admin sehingga dapat melakukan insert, update, dan delete users
-2372061 - Laura Puspa Ameliana: Pengerjaan fitur redeem agar terhubung dengan poin member 
-2372068 - Indri Mahalani Simamora: Memperbaiki UI website (tombol, color palette website, tulisan) agar lebih menyatu
+2372055 - Bryant Marvel Lim: Menambahkan fitur kelola users untuk admin sehingga dapat melakukan insert, update, dan delete users<br />
+2372061 - Laura Puspa Ameliana: Pengerjaan fitur redeem agar terhubung dengan poin member <br />
+2372068 - Indri Mahalani Simamora: Memperbaiki UI website (tombol, color palette website, tulisan) agar lebih menyatu<br />
 Catatan: Tidak ada kendala dan masih berjalan dengan lancar
 
 -> 15 Dec 2025 - 19 Dec 2025
 
-2372055 - Bryant Marvel Lim: Menambahkan tampilan untuk ubah rasio dan kelola voucher untuk admin
-2372061 - Laura Puspa Ameliana: Menambah fitur member
-2372068 - Indri Mahalani Simamora: Melengkapi fitur member
+2372055 - Bryant Marvel Lim: Menambahkan tampilan untuk ubah rasio dan kelola voucher untuk admin<br />
+2372061 - Laura Puspa Ameliana: Menambah fitur member<br />
+2372068 - Indri Mahalani Simamora: Melengkapi fitur member<br />
 Catatan: Ada masalah untuk mengubah rasio poin, karena di database tidak menyimpan tabel dan kolom untuk rasio tersebut. Untuk solusi kedepannya, sepertinya perlu untuk diubah databasenya lagi.
