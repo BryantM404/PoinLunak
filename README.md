@@ -126,9 +126,12 @@ docker-compose up -d
 # Jalankan migrasi
 docker-compose run --rm migrate
 
-# (Optional) Seed data
-docker-compose exec app npm run prisma:seed
+# (Optional) Seed data - jalankan dari LUAR container
+# Karena seed butuh bcryptjs yang tidak ada di production image
+DATABASE_URL="mysql://poinlunak:poinlunak123@localhost:3307/poin_lunak" npm run prisma:seed
 ```
+
+> ⚠️ **Catatan**: Untuk seed di Full Docker, jalankan dari terminal lokal (bukan dari dalam container) karena production image tidak menyertakan devDependencies.
 
 ---
 
