@@ -58,30 +58,40 @@ export async function POST(request: Request) {
       );
     }
 
-    // Get reward details (assuming rewards are predefined in a catalog)
-    // For this implementation, we'll use a simple map
-    const rewardCatalog = [
-      { id: 1, name: 'Voucher Diskon 10%', points: 1000 },
-      { id: 2, name: 'Voucher Diskon 20%', points: 2500 },
-      { id: 3, name: 'Voucher Gratis 1 Porsi', points: 5000 },
-      { id: 4, name: 'Voucher Gratis 2 Porsi', points: 10000 },
-    ];
+    // Get reward item from database
+    const rewardItem = await prisma.reward_items.findUnique({
+      where: { id: validatedData.reward_id },
+    });
 
-    const rewardInfo = rewardCatalog.find(r => r.id === validatedData.reward_id);
-
-    if (!rewardInfo) {
+    if (!rewardItem) {
       return NextResponse.json<ApiResponse>(
         { success: false, error: 'Reward tidak ditemukan' },
         { status: 404 }
       );
     }
 
+    // Check if reward is active
+    if (rewardItem.status !== 'ACTIVE') {
+      return NextResponse.json<ApiResponse>(
+        { success: false, error: 'Reward ini tidak tersedia' },
+        { status: 400 }
+      );
+    }
+
+    // Check if stock is available
+    if (rewardItem.stock <= 0) {
+      return NextResponse.json<ApiResponse>(
+        { success: false, error: 'Stok voucher habis' },
+        { status: 400 }
+      );
+    }
+
     // Check if user has enough points
-    if (user.points < rewardInfo.points) {
+    if (user.points < rewardItem.points_required) {
       return NextResponse.json<ApiResponse>(
         {
           success: false,
-          error: `Poin tidak cukup. Anda memiliki ${user.points} poin, diperlukan ${rewardInfo.points} poin.`,
+          error: `Poin tidak cukup. Anda memiliki ${user.points} poin, diperlukan ${rewardItem.points_required} poin.`,
         },
         { status: 400 }
       );
@@ -110,14 +120,27 @@ export async function POST(request: Request) {
       );
     }
 
-    // Create reward record
+    // Create reward record with expiry based on validity_days
+    const expiresAt = new Date();
+    expiresAt.setDate(expiresAt.getDate() + (rewardItem.validity_days || 30));
+
     const reward = await prisma.rewards.create({
       data: {
         users_id: validatedData.users_id,
-        reward_name: rewardInfo.name,
-        points_required: rewardInfo.points,
+        reward_item_id: rewardItem.id,
         code: voucherCode!,
-        status: 'available',
+        status: 'ACTIVE',
+        expires_at: expiresAt,
+      },
+    });
+
+    // Decrease stock of reward item
+    await prisma.reward_items.update({
+      where: { id: rewardItem.id },
+      data: {
+        stock: {
+          decrement: 1,
+        },
       },
     });
 
@@ -126,7 +149,7 @@ export async function POST(request: Request) {
       where: { id: validatedData.users_id },
       data: {
         points: {
-          decrement: rewardInfo.points,
+          decrement: rewardItem.points_required,
         },
       },
     });
@@ -135,7 +158,7 @@ export async function POST(request: Request) {
     await prisma.membership_logs.create({
       data: {
         users_id: validatedData.users_id,
-        activity: `Tukar ${rewardInfo.points} poin untuk ${rewardInfo.name}`,
+        activity: `Tukar ${rewardItem.points_required} poin untuk ${rewardItem.name}`,
       },
     });
 

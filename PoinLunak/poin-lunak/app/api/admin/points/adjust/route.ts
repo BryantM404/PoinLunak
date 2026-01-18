@@ -53,14 +53,7 @@ export async function POST(request: Request) {
       },
     });
 
-    // Check membership level change
-    const newLevel = getMembershipLevel(newPoints);
-    if (newLevel !== updatedUser.membership_level) {
-      await prisma.users.update({
-        where: { id: validatedData.users_id },
-        data: { membership_level: newLevel },
-      });
-    }
+    // Membership levels removed - no level updates needed
 
     // Create membership log
     const adjustmentType = validatedData.points > 0 ? 'Penambahan' : 'Pengurangan';

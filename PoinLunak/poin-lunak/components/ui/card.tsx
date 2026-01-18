@@ -1,4 +1,3 @@
-// Card component
 
 'use client';
 
@@ -11,7 +10,7 @@ interface CardProps {
 
 export function Card({ children, className }: CardProps) {
   return (
-    <div className={cn('bg-white rounded-lg shadow-md p-6', className)}>
+    <div className={cn('bg-white border border-[#e5e7eb] rounded-md p-4', className)}>
       {children}
     </div>
   );
@@ -19,7 +18,7 @@ export function Card({ children, className }: CardProps) {
 
 export function CardHeader({ children, className }: CardProps) {
   return (
-    <div className={cn('mb-4', className)}>
+    <div className={cn('mb-2', className)}>
       {children}
     </div>
   );
@@ -27,7 +26,7 @@ export function CardHeader({ children, className }: CardProps) {
 
 export function CardTitle({ children, className }: CardProps) {
   return (
-    <h2 className={cn('text-2xl font-bold text-[#6B3E1D]', className)}>
+    <h2 className={cn('text-lg font-semibold text-[#875600]', className)}>
       {children}
     </h2>
   );

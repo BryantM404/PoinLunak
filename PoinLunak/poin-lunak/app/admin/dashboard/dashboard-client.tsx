@@ -27,10 +27,31 @@ export default function AdminDashboardClient() {
   const [stats, setStats] = useState<AdminStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [showAdjustModal, setShowAdjustModal] = useState(false);
+  const [pointsRatio, setPointsRatio] = useState<{ amount: number; points: number; description: string } | null>(null);
+  const [showRatioModal, setShowRatioModal] = useState(false);
 
   useEffect(() => {
     fetchStats();
+    fetchPointsRatio();
   }, []);
+
+  const fetchPointsRatio = async () => {
+    try {
+      // Try to get ratio from localStorage first
+      const stored = localStorage.getItem('pointsRatio');
+      if (stored) {
+        setPointsRatio(JSON.parse(stored));
+      } else {
+        // Initialize with default ratio if not exists
+        const defaultRatio = { amount: 1000, points: 1, description: 'Rp 1.000 = 1 Poin' };
+        setPointsRatio(defaultRatio);
+        localStorage.setItem('pointsRatio', JSON.stringify(defaultRatio));
+      }
+    } catch (error) {
+      console.error('Error loading points ratio:', error);
+      setPointsRatio({ amount: 1000, points: 1, description: 'Rp 1.000 = 1 Poin' });
+    }
+  };
 
   const fetchStats = async () => {
     try {
@@ -50,19 +71,9 @@ export default function AdminDashboardClient() {
     }
   };
 
-  const handleLogout = async () => {
-    try {
-      await fetch('/api/auth/logout', { method: 'POST' });
-      toast.success('Logout berhasil');
-      router.push('/login');
-    } catch (error) {
-      toast.error('Gagal logout');
-    }
-  };
-
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-white">
         <LoadingSpinner size="lg" />
       </div>
     );
@@ -70,33 +81,19 @@ export default function AdminDashboardClient() {
 
   if (!stats) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-white">
         <p>Gagal memuat data</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-[#6B3E1D] text-white py-4 px-6 shadow-md">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <h1 className="text-2xl font-bold">Dashboard Admin - Poin Lunak</h1>
-          <div className="flex gap-3">
-            <Button variant="outline" onClick={() => router.push('/admin/users')}>
-              👥 Kelola User
-            </Button>
-            <Button variant="outline" onClick={() => router.push('/admin/transactions')}>
-              💳 Transaksi
-            </Button>
-            <Button variant="danger" onClick={handleLogout}>
-              Logout
-            </Button>
-          </div>
-        </div>
-      </header>
-
+    <div className="min-h-screen bg-white">
       <main className="max-w-7xl mx-auto p-6 space-y-6">
+        {/* Page Title with Back Button */}
+        <div className="flex items-center gap-4">
+          <h1 className="text-3xl font-bold text-[#6B3E1D]">Dashboard Admin</h1>
+        </div>
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <Card>
@@ -209,9 +206,47 @@ export default function AdminDashboardClient() {
             </CardContent>
           </Card>
         </div>
+
+        {/* Points Ratio Section */}
+        <div className="mt-8">
+          <h2 className="text-2xl font-bold text-[#6B3E1D] mb-4">📈 Kelola Rasio Poin</h2>
+          <PointsRatioSection pointsRatio={pointsRatio} onEditClick={() => setShowRatioModal(true)} onSave={fetchPointsRatio} />
+        </div>
+
+        {/* Menu Section */}
+        <div className="mt-8">
+          <h2 className="text-2xl font-bold text-[#6B3E1D] mb-4">Menu Manajemen</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <Button 
+              className="w-full bg-[#6B3E1D] text-white hover:bg-[#4e2710] py-6 text-lg"
+              onClick={() => router.push('/admin/users')}
+            >
+              Kelola User
+            </Button>
+            <Button 
+              className="w-full bg-[#6B3E1D] text-white hover:bg-[#4e2710] py-6 text-lg"
+              onClick={() => router.push('/admin/transactions')}
+            >
+              Transaksi
+            </Button>
+            <Button 
+              className="w-full bg-[#6B3E1D] text-white hover:bg-[#4e2710] py-6 text-lg"
+              onClick={() => router.push('/admin/rewards')}
+            >
+              Reward
+            </Button>
+          </div>
+        </div>
       </main>
       {showAdjustModal && (
         <PointAdjustmentModal onClose={() => setShowAdjustModal(false)} />
+      )}
+      {showRatioModal && (
+        <PointsRatioModal 
+          currentRatio={pointsRatio} 
+          onClose={() => setShowRatioModal(false)} 
+          onSave={fetchPointsRatio}
+        />
       )}
     </div>
   );
@@ -298,7 +333,7 @@ function PointAdjustmentModal({ onClose }: { onClose: () => void }) {
               <Button
                 type="submit"
                 variant="primary"
-                className="flex-1"
+                className="flex-1 bg-[#DDBA72] border-[#DDBA72] text-[#6B3E1D] hover:bg-[#c9a860] hover:border-[#c9a860]"
                 disabled={loading}
               >
                 {loading ? 'Menyimpan...' : 'Simpan'}
@@ -307,7 +342,188 @@ function PointAdjustmentModal({ onClose }: { onClose: () => void }) {
                 type="button"
                 variant="outline"
                 onClick={onClose}
-                className="flex-1"
+                className="flex-1 border-[#6B3E1D] text-[#6B3E1D] bg-white hover:bg-[#f3e7d1]"
+              >
+                Batal
+              </Button>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+function PointsRatioSection({ 
+  pointsRatio, 
+  onEditClick,
+  onSave 
+}: { 
+  pointsRatio: { amount: number; points: number; description: string } | null;
+  onEditClick: () => void;
+  onSave: () => void;
+}) {
+  if (!pointsRatio) {
+    return (
+      <Card>
+        <CardContent className="pt-6">
+          <div className="text-center py-8 text-gray-500">
+            Loading...
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  return (
+    <Card>
+      <CardContent className="pt-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="p-4 bg-[#f3e7d1] rounded-lg">
+            <div className="text-sm text-[#875600] font-medium mb-2">
+              Jumlah Rupiah
+            </div>
+            <div className="text-3xl font-bold text-[#6B3E1D]">
+              Rp {pointsRatio.amount.toLocaleString('id-ID')}
+            </div>
+          </div>
+
+          <div className="p-4 bg-[#f3e7d1] rounded-lg">
+            <div className="text-sm text-[#875600] font-medium mb-2">
+              Jumlah Poin
+            </div>
+            <div className="text-3xl font-bold text-[#6B3E1D]">
+              {pointsRatio.points} Poin
+            </div>
+          </div>
+        </div>
+
+        {pointsRatio.description && (
+          <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+            <div className="text-sm font-medium text-blue-900 mb-1">
+              Keterangan
+            </div>
+            <div className="text-blue-800">{pointsRatio.description}</div>
+          </div>
+        )}
+
+        <div className="mt-6">
+          <Button
+            className="w-full bg-white border-[#6B3E1D] text-[#6B3E1D] hover:bg-[#f3e7d1]"
+            onClick={onEditClick}
+          >
+            ✎ Edit Rasio Poin
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+function PointsRatioModal({ 
+  currentRatio, 
+  onClose,
+  onSave
+}: { 
+  currentRatio: { amount: number; points: number; description: string } | null;
+  onClose: () => void;
+  onSave: () => void;
+}) {
+  const [amount, setAmount] = useState(currentRatio?.amount.toString() || '');
+  const [points, setPoints] = useState(currentRatio?.points.toString() || '');
+  const [description, setDescription] = useState(currentRatio?.description || '');
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!amount || !points) {
+      toast.error('Semua field harus diisi');
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const newRatio = {
+        amount: parseFloat(amount),
+        points: parseInt(points),
+        description: description
+      };
+
+      localStorage.setItem('pointsRatio', JSON.stringify(newRatio));
+      toast.success('Rasio poin berhasil diperbarui');
+      onSave();
+      onClose();
+    } catch (error) {
+      console.error('Error updating ratio:', error);
+      toast.error('Terjadi kesalahan');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle>Edit Rasio Poin</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="block text-xs font-medium text-[#6B3E1D] mb-1">
+                Jumlah Rupiah
+              </label>
+              <input
+                type="number"
+                step="0.01"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                className="w-full px-3 py-2 border border-[#d1d5db] rounded-md focus:border-[#6B3E1D] text-sm"
+                placeholder="Contoh: 1000"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-[#6B3E1D] mb-1">
+                Jumlah Poin
+              </label>
+              <input
+                type="number"
+                step="1"
+                value={points}
+                onChange={(e) => setPoints(e.target.value)}
+                className="w-full px-3 py-2 border border-[#d1d5db] rounded-md focus:border-[#6B3E1D] text-sm"
+                placeholder="Contoh: 1"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-[#6B3E1D] mb-1">
+                Keterangan (Opsional)
+              </label>
+              <input
+                type="text"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                className="w-full px-3 py-2 border border-[#d1d5db] rounded-md focus:border-[#6B3E1D] text-sm"
+                placeholder="Contoh: Rp 1.000 = 1 poin"
+              />
+            </div>
+            <div className="flex gap-2">
+              <Button
+                type="submit"
+                className="flex-1 bg-white border-[#6B3E1D] text-[#6B3E1D] hover:bg-[#f3e7d1]"
+                disabled={loading}
+              >
+                {loading ? 'Menyimpan...' : 'Simpan'}
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={onClose}
+                className="flex-1 border-[#6B3E1D] text-[#6B3E1D] bg-white hover:bg-[#f3e7d1]"
               >
                 Batal
               </Button>

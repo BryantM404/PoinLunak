@@ -49,16 +49,15 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen text-black flex items-center justify-center bg-gradient-to-br from-[#DDBA72] to-[#6B3E1D] p-4">
+    <div className="min-h-screen text-black flex items-center justify-center bg-[#f7f7f9] p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
           <div className="text-center mb-4">
             <div className="text-6xl mb-4">
               <img
               src="/logo-poin-lunak.png"
-              // alt="Logo Poin Lunak"
-              width={128} // Set width in pixels
-              height={128} // Set height in pixels
+              width={128} 
+              height={128}
               className="mx-auto"
             /></div>
             <CardTitle className="text-3xl">Poin Lunak</CardTitle>
@@ -86,7 +85,7 @@ export default function LoginPage() {
             <Button
               type="submit"
               variant="primary"
-              className="w-full"
+              className="w-full bg-white border-[#6B3E1D] text-[#6B3E1D] hover:bg-[#f3e7d1] hover:border-[#DDBA72]"
               disabled={loading}
             >
               {loading ? 'Loading...' : 'Login'}
@@ -96,19 +95,19 @@ export default function LoginPage() {
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
               Belum punya akun?{' '}
-              <button
-                onClick={() => router.push('/register')}
+                <a
+                href="/register"
                 className="text-[#6B3E1D] font-semibold hover:underline"
-              >
+                >
                 Daftar di sini
-              </button>
+                </a>
             </p>
           </div>
 
           <div className="mt-6 p-4 bg-gray-50 rounded-lg">
             <p className="text-xs text-gray-600 mb-2">Demo Login:</p>
-            <p className="text-xs">Admin: admin@poinlunak.com / admin123</p>
-            <p className="text-xs">Member: member@poinlunak.com / member123</p>
+            <p className="text-xs">Admin: admin1@poinlunak.com / admin123</p>
+            <p className="text-xs">Member: ahmad@example.com / member123</p>
           </div>
         </CardContent>
       </Card>

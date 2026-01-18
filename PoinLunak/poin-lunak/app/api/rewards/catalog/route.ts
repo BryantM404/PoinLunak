@@ -1,6 +1,7 @@
-// GET /api/rewards/catalog - Get available rewards catalog
+// GET /api/rewards/catalog - Get available rewards catalog from database
 
 import { NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
 import { getCurrentUser } from '@/lib/auth';
 import type { ApiResponse } from '@/lib/types';
 
@@ -14,37 +15,27 @@ export async function GET() {
       );
     }
 
-    // Reward catalog
-    const catalog = [
-      {
-        id: 1,
-        name: 'Voucher Diskon 10%',
-        description: 'Dapatkan diskon 10% untuk pembelian berikutnya',
-        points: 1000,
-        image: '/rewards/discount-10.png',
+    // Fetch active reward items from database (only items with stock > 0)
+    const rewardItems = await prisma.reward_items.findMany({
+      where: {
+        status: 'ACTIVE',
+        stock: {
+          gt: 0,
+        },
       },
-      {
-        id: 2,
-        name: 'Voucher Diskon 20%',
-        description: 'Dapatkan diskon 20% untuk pembelian berikutnya',
-        points: 2500,
-        image: '/rewards/discount-20.png',
-      },
-      {
-        id: 3,
-        name: 'Voucher Gratis 1 Porsi',
-        description: 'Gratis 1 porsi ayam goreng tulang lunak',
-        points: 5000,
-        image: '/rewards/free-1.png',
-      },
-      {
-        id: 4,
-        name: 'Voucher Gratis 2 Porsi',
-        description: 'Gratis 2 porsi ayam goreng tulang lunak',
-        points: 10000,
-        image: '/rewards/free-2.png',
-      },
-    ];
+      orderBy: { points_required: 'asc' },
+    });
+
+    // Format catalog
+    const catalog = rewardItems.map((item) => ({
+      id: item.id,
+      name: item.name,
+      description: item.description || '',
+      points: item.points_required,
+      stock: item.stock,
+      validity_days: item.validity_days,
+      status: item.status,
+    }));
 
     return NextResponse.json<ApiResponse>(
       {

@@ -20,11 +20,8 @@ export default async function MemberDashboardPage() {
       name: true,
       email: true,
       role: true,
-      phone: true,
-      address: true,
       join_date: true,
       points: true,
-      membership_level: true,
       status: true,
       created_at: true,
     },
@@ -41,10 +38,13 @@ export default async function MemberDashboardPage() {
     take: 10,
   });
 
-  // Fetch redeemed rewards
+  // Fetch redeemed rewards with reward_item relation
   const redeemedRewards = await prisma.rewards.findMany({
     where: { users_id: currentUser.id },
     orderBy: { created_at: 'desc' },
+    include: {
+      reward_item: true,
+    },
   });
 
   // Convert Decimal types to numbers for client serialization
@@ -57,9 +57,16 @@ export default async function MemberDashboardPage() {
 
   const serializedRewards = redeemedRewards.map(reward => ({
     ...reward,
-    points_required: Number(reward.points_required),
+    points_required: reward.reward_item?.points_required || 0,
     created_at: reward.created_at.toISOString(),
-    redeemed_at: reward.redeemed_at ? reward.redeemed_at.toISOString() : null,
+    exchanged_at: reward.exchanged_at.toISOString(),
+    expires_at: reward.expires_at.toISOString(),
+    reward_item: reward.reward_item ? {
+      ...reward.reward_item,
+      points_required: reward.reward_item.points_required,
+      created_at: reward.reward_item.created_at.toISOString(),
+      updated_at: reward.reward_item.updated_at.toISOString(),
+    } : null,
   }));
 
   const serializedUser = {

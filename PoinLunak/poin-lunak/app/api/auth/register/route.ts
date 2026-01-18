@@ -34,13 +34,10 @@ export async function POST(request: Request) {
         name: validatedData.name,
         email: validatedData.email,
         password: hashedPassword,
-        phone: validatedData.phone || null,
-        address: validatedData.address || null,
         role: 'MEMBER',
         join_date: new Date(),
         points: 0,
-        membership_level: 'BRONZE',
-        status: 'active',
+        status: 'ACTIVE',
       },
     });
 

@@ -1,0 +1,26 @@
+# Docker Compose for Development (only database)
+# Use this when you want to run Next.js locally but need MySQL in Docker
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: poinlunak-db-dev
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: poin_lunak
+      MYSQL_USER: poinlunak
+      MYSQL_PASSWORD: poinlunak123
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data_dev:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-prootpassword"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+volumes:
+  mysql_data_dev:

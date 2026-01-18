@@ -1,5 +1,5 @@
 // Seed script to populate database with demo data
-// Run: node prisma/seed.mjs
+// Run: npx prisma db seed
 
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
@@ -13,183 +13,241 @@ async function main() {
   const adminPassword = await bcrypt.hash('admin123', 10);
   const memberPassword = await bcrypt.hash('member123', 10);
 
-  // Create Admin User
-  const admin = await prisma.users.upsert({
-    where: { email: 'admin@poinlunak.com' },
+  // ========== USERS (20+) ==========
+  console.log('\n📝 Seeding Users...');
+  
+  // Create 2 Admin Users
+  const admin1 = await prisma.users.upsert({
+    where: { email: 'admin1@poinlunak.com' },
     update: {},
     create: {
       name: 'Admin Poin Lunak',
-      email: 'admin@poinlunak.com',
+      email: 'admin1@poinlunak.com',
       password: adminPassword,
       role: 'ADMIN',
-      phone: '081234567890',
-      address: 'Jl. Surya Sumantri No. 65, Bandung',
-      join_date: new Date(),
+      join_date: new Date('2025-01-01'),
       points: 0,
-      membership_level: 'GOLD',
-      status: 'active',
+      status: 'ACTIVE',
     },
   });
-  console.log('✅ Admin user created:', admin.email);
 
-  // Create Demo Member Users
-  const member1 = await prisma.users.upsert({
-    where: { email: 'member@poinlunak.com' },
+  const admin2 = await prisma.users.upsert({
+    where: { email: 'admin2@poinlunak.com' },
     update: {},
     create: {
-      name: 'John Doe',
-      email: 'member@poinlunak.com',
-      password: memberPassword,
-      role: 'MEMBER',
-      phone: '081298765432',
-      address: 'Jl. Gatot Subroto No. 123, Bandung',
-      join_date: new Date(),
-      points: 550, // Will have 550 points from transactions
-      membership_level: 'BRONZE', // Will be updated based on points
-      status: 'active',
+      name: 'Admin Manager',
+      email: 'admin2@poinlunak.com',
+      password: adminPassword,
+      role: 'ADMIN',
+      join_date: new Date('2025-01-02'),
+      points: 0,
+      status: 'ACTIVE',
     },
   });
-  console.log('✅ Member user created:', member1.email);
 
-  const member2 = await prisma.users.upsert({
-    where: { email: 'jane@example.com' },
-    update: {},
-    create: {
-      name: 'Jane Smith',
-      email: 'jane@example.com',
-      password: memberPassword,
-      role: 'MEMBER',
-      phone: '082187654321',
-      address: 'Jl. Dago No. 45, Bandung',
-      join_date: new Date(),
-      points: 280, // Will have 280 points from transactions
-      membership_level: 'BRONZE',
-      status: 'active',
-    },
-  });
-  console.log('✅ Member user created:', member2.email);
-
-  // Create Sample Transactions for member1 (more realistic data)
-  const transactions = [
-    {
-      users_id: member1.id,
-      total_item: 2,
-      total_transaction: 85000,
-      items: '2x Ayam Goreng Tulang Lunak Original, 1x Es Teh Manis',
-      points_gained: 85, // 85000 / 1000 = 85 points
-    },
-    {
-      users_id: member1.id,
-      total_item: 3,
-      total_transaction: 125000,
-      items: '3x Ayam Goreng Tulang Lunak Pedas, 2x Nasi Putih',
-      points_gained: 125, // 125000 / 1000 = 125 points
-    },
-    {
-      users_id: member1.id,
-      total_item: 1,
-      total_transaction: 65000,
-      items: '1x Paket Hemat (Ayam + Nasi + Minum)',
-      points_gained: 65, // 65000 / 1000 = 65 points
-    },
-    {
-      users_id: member1.id,
-      total_item: 4,
-      total_transaction: 180000,
-      items: '4x Ayam Goreng Tulang Lunak Original, 2x Sambal Extra',
-      points_gained: 180, // 180000 / 1000 = 180 points
-    },
-    {
-      users_id: member1.id,
-      total_item: 2,
-      total_transaction: 95000,
-      items: '2x Ayam Goreng Tulang Lunak Bumbu Kecap, 2x Es Jeruk',
-      points_gained: 95, // 95000 / 1000 = 95 points
-    },
+  // Create 20+ Member Users
+  const memberEmails = [
+    'budi@example.com', 'siti@example.com', 'ahmad@example.com', 'dewi@example.com', 'rinto@example.com',
+    'rina@example.com', 'tono@example.com', 'maya@example.com', 'irwan@example.com', 'linda@example.com',
+    'bambang@example.com', 'sinta@example.com', 'hendra@example.com', 'fitri@example.com', 'dadang@example.com',
+    'putri@example.com', 'yusuf@example.com', 'sania@example.com', 'ridho@example.com', 'nurul@example.com',
+    'wicak@example.com', 'ikhlas@example.com', 'bella@example.com', 'citra@example.com',
   ];
 
-  for (const txData of transactions) {
-    await prisma.transactions.create({ data: txData });
+  const members = [];
+  for (let i = 0; i < memberEmails.length; i++) {
+    const member = await prisma.users.upsert({
+      where: { email: memberEmails[i] },
+      update: {},
+      create: {
+        name: memberEmails[i].split('@')[0].charAt(0).toUpperCase() + memberEmails[i].split('@')[0].slice(1),
+        email: memberEmails[i],
+        password: memberPassword,
+        role: 'MEMBER',
+        join_date: new Date(2024, Math.floor(i / 4), (i % 28) + 1),
+        points: Math.floor(Math.random() * 500) + 100,
+        status: i % 10 === 0 ? 'INACTIVE' : 'ACTIVE',
+      },
+    });
+    members.push(member);
   }
-  console.log(`✅ Created ${transactions.length} sample transactions for member1`);
-  console.log(`   Total points for member1: ${transactions.reduce((sum, t) => sum + t.points_gained, 0)} points`);
+  console.log(`✅ Created ${2} admin users and ${members.length} member users`);
 
-  // Create Sample Transactions for member2
-  const transactions2 = [
-    {
-      users_id: member2.id,
-      total_item: 1,
-      total_transaction: 45000,
-      items: '1x Ayam Goreng Tulang Lunak Original',
-      points_gained: 45, // 45000 / 1000 = 45 points
-    },
-    {
-      users_id: member2.id,
-      total_item: 2,
-      total_transaction: 85000,
-      items: '2x Paket Ayam + Nasi',
-      points_gained: 85, // 85000 / 1000 = 85 points
-    },
-    {
-      users_id: member2.id,
-      total_item: 3,
-      total_transaction: 150000,
-      items: '3x Ayam Goreng Tulang Lunak Pedas, 3x Es Teh',
-      points_gained: 150, // 150000 / 1000 = 150 points
-    },
+  // ========== REWARD ITEMS (20+) ==========
+  console.log('\n🎁 Seeding Reward Items...');
+  
+  const rewardItemsData = [
+    { name: 'Voucher Diskon 10%', description: 'Diskon 10% untuk pembelian berikutnya', points_required: 100 },
+    { name: 'Voucher Diskon 20%', description: 'Diskon 20% untuk pembelian berikutnya', points_required: 200 },
+    { name: 'Gratis 1 Porsi Ayam', description: 'Gratis 1 porsi ayam goreng tulang lunak', points_required: 150 },
+    { name: 'Gratis 2 Porsi Ayam', description: 'Gratis 2 porsi ayam goreng tulang lunak', points_required: 300 },
+    { name: 'Gratis 1 Minuman', description: 'Gratis 1 minuman (Es Teh/Es Jeruk/Kopi)', points_required: 75 },
+    { name: 'Gratis Paket Hemat', description: 'Gratis 1 paket hemat (Ayam + Nasi + Minum)', points_required: 250 },
+    { name: 'Voucher Rp 50.000', description: 'Voucher belanja senilai Rp 50.000', points_required: 500 },
+    { name: 'Voucher Rp 100.000', description: 'Voucher belanja senilai Rp 100.000', points_required: 1000 },
+    { name: 'Gratis Sambal Extra (3x)', description: 'Gratis 3 sambal extra untuk pembelian Ayam', points_required: 90 },
+    { name: 'Gratis Nasi Putih (2x)', description: 'Gratis 2 porsi nasi putih', points_required: 80 },
+    { name: 'Upgrade ke Paket Premium', description: 'Upgrade gratis ke paket premium untuk 1x transaksi', points_required: 350 },
+    { name: 'Gratis Ongkir', description: 'Gratis ongkos kirim untuk 1x pemesanan', points_required: 200 },
+    { name: 'Double Points Next Purchase', description: 'Dapatkan 2x poin untuk pembelian berikutnya', points_required: 400 },
+    { name: 'Voucher Diskon 15%', description: 'Diskon 15% untuk pembelian berikutnya', points_required: 150 },
+    { name: 'Gratis Dessert', description: 'Gratis 1 dessert pilihan', points_required: 120 },
+    { name: 'Member Priority Card', description: 'Kartu member prioritas untuk antrian lebih cepat', points_required: 500 },
+    { name: 'Voucher Rp 25.000', description: 'Voucher belanja senilai Rp 25.000', points_required: 250 },
+    { name: 'Bundle Hemat 5x Ayam', description: 'Bundle 5 porsi ayam goreng dengan harga spesial', points_required: 600 },
+    { name: 'Gratis Minuman Premium', description: 'Gratis 1 minuman premium (Kopi Spesial/Jus)', points_required: 180 },
+    { name: 'Birthday Special Voucher', description: 'Voucher khusus ulang tahun senilai Rp 75.000', points_required: 300 },
+    { name: 'Gratis Pesan Catering', description: 'Gratis pesan catering untuk acara Anda (min 10 porsi)', points_required: 1500 },
   ];
 
-  for (const txData of transactions2) {
-    await prisma.transactions.create({ data: txData });
+  const rewardItems = [];
+  for (const data of rewardItemsData) {
+    const item = await prisma.reward_items.create({
+      data: {
+        ...data,
+        status: 'ACTIVE',
+      },
+    });
+    rewardItems.push(item);
   }
-  console.log(`✅ Created ${transactions2.length} sample transactions for member2`);
-  console.log(`   Total points for member2: ${transactions2.reduce((sum, t) => sum + t.points_gained, 0)} points`);
+  console.log(`✅ Created ${rewardItems.length} reward items`);
 
-  // Create Sample Rewards (redeemed by member1)
-  const reward1 = await prisma.rewards.create({
-    data: {
-      users_id: member1.id,
-      reward_name: 'Voucher Diskon 10%',
-      points_required: 100,
-      code: 'POIN-DEMO1234',
-      status: 'available',
-    },
-  });
-  console.log('✅ Sample reward created:', reward1.code);
+  // ========== TRANSACTIONS (30+) ==========
+  console.log('\n📊 Seeding Transactions...');
+  
+  const transactionsData = [];
+  let transactionId = 0;
+  
+  for (let i = 0; i < 30; i++) {
+    const member = members[i % members.length];
+    const amount = Math.floor(Math.random() * 150000) + 50000;
+    const points = Math.floor(amount / 1000);
+    
+    transactionsData.push({
+      users_id: member.id,
+      total_item: Math.floor(Math.random() * 5) + 1,
+      total_transaction: amount,
+      items: `Ayam Goreng Tulang Lunak x${Math.floor(Math.random() * 3) + 1}`,
+      points_gained: points,
+    });
+  }
 
-  const reward2 = await prisma.rewards.create({
-    data: {
-      users_id: member1.id,
-      reward_name: 'Gratis 1 Es Teh Manis',
-      points_required: 50,
-      code: 'POIN-FREE5678',
-      status: 'used',
-    },
-  });
-  console.log('✅ Sample reward created:', reward2.code);
+  for (const txData of transactionsData) {
+    await prisma.transactions.create({ data: txData });
+    transactionId++;
+  }
+  console.log(`✅ Created ${transactionId} transactions`);
 
-  // Create Membership Logs
-  await prisma.membership_logs.create({
-    data: {
-      users_id: member1.id,
-      activity: 'Registrasi akun baru',
-    },
-  });
+  // ========== REWARDS (Voucher yang Sudah Ditukar) ==========
+  console.log('\n🎫 Seeding Vouchers (Rewards yang Sudah Ditukar Poin)...');
+  
+  const vouchersData = [];
+  
+  // Create vouchers untuk beberapa members
+  for (let i = 0; i < 20; i++) {
+    const member = members[i % members.length];
+    const reward = rewardItems[i % rewardItems.length];
+    const daysAgo = Math.floor(Math.random() * 14); // Created within last 14 days
+    
+    // Determine expiry date (10-30 days from creation)
+    const expiryDays = Math.floor(Math.random() * 21) + 10; // 10-30 days
+    const createdDate = new Date(Date.now() - daysAgo * 24 * 60 * 60 * 1000);
+    const expiryDate = new Date(createdDate.getTime() + expiryDays * 24 * 60 * 60 * 1000);
+    
+    // Determine status based on expiry
+    let status = 'ACTIVE';
+    if (expiryDate < new Date()) {
+      status = 'EXPIRED';
+    } else if (i % 3 === 0) {
+      status = 'USED'; // Some vouchers are already used
+    }
+    
+    const voucher = await prisma.rewards.create({
+      data: {
+        reward_item_id: reward.id,
+        users_id: member.id,
+        code: `VOUCHER-${String(Date.now() + i).slice(-8)}`,
+        status: status,
+        exchanged_at: createdDate,
+        expires_at: expiryDate,
+      },
+    });
+    
+    vouchersData.push(voucher);
+  }
+  console.log(`✅ Created ${vouchersData.length} vouchers (exchanged rewards)`);
 
-  await prisma.membership_logs.create({
-    data: {
-      users_id: member1.id,
-      activity: 'Naik ke level SILVER',
-    },
-  });
+  // ========== REDEMPTION HISTORY (Penggunaan Voucher) ==========
+  console.log('\n📜 Seeding Redemption History (Penggunaan Voucher)...');
+  
+  const redemptionData = [];
+  
+  // Only redeem USED vouchers
+  const usedVouchers = vouchersData.filter(v => v.status === 'USED');
+  
+  for (let i = 0; i < Math.min(12, usedVouchers.length); i++) {
+    const voucher = usedVouchers[i];
+    
+    const redemption = await prisma.redemption_history.create({
+      data: {
+        rewards_id: voucher.id,
+        users_id: voucher.users_id,
+        redeemed_at: new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000), // Within last 7 days
+        transaction_ref: `TXN-${String(Date.now() + i).slice(-6)}`,
+      },
+    });
+    
+    redemptionData.push(redemption);
+  }
+  console.log(`✅ Created ${redemptionData.length} redemption history records`);
 
-  console.log('✅ Membership logs created');
+  // ========== MEMBERSHIP LOGS (20+) ==========
+  console.log('\n📋 Seeding Membership Logs...');
+  
+  const logActivities = [
+    'Registrasi akun baru',
+    'Melakukan transaksi pembelian',
+    'Menukar poin dengan reward',
+    'Update profil pengguna',
+    'Login ke aplikasi',
+    'Lihat riwayat transaksi',
+    'Mengajukan keluhan/feedback',
+    'Verifikasi email',
+    'Ubah password akun',
+    'Aktivasi member premium',
+  ];
 
-  console.log('\n🎉 Database seeded successfully!');
-  console.log('\n📝 Demo Credentials:');
-  console.log('   Admin: admin@poinlunak.com / admin123');
-  console.log('   Member: member@poinlunak.com / member123');
-  console.log('   Member 2: jane@example.com / member123\n');
+  let logCount = 0;
+  for (let i = 0; i < 30; i++) {
+    const member = members[i % members.length];
+    const activity = logActivities[Math.floor(Math.random() * logActivities.length)];
+    
+    await prisma.membership_logs.create({
+      data: {
+        users_id: member.id,
+        activity: activity,
+        activity_time: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000),
+      },
+    });
+    logCount++;
+  }
+  console.log(`✅ Created ${logCount} membership log records`);
+
+  // ========== SUMMARY ==========
+  console.log('\n\n🎉 Database seeded successfully!');
+  console.log('\n📊 Summary:');
+  console.log(`   ✓ Users: 2 Admin + ${members.length} Members = ${2 + members.length} total`);
+  console.log(`   ✓ Transactions: ${transactionId}`);
+  console.log(`   ✓ Reward Items (Catalog): ${rewardItems.length}`);
+  console.log(`   ✓ Vouchers (Exchanged Rewards): ${vouchersData.length}`);
+  console.log(`   ✓ Redemption History (Used Vouchers): ${redemptionData.length}`);
+  console.log(`   ✓ Membership Logs: ${logCount}`);
+  
+  console.log('\n🔐 Demo Credentials:');
+  console.log('   Admin 1: admin1@poinlunak.com / admin123');
+  console.log('   Admin 2: admin2@poinlunak.com / admin123');
+  console.log('   Member: budi@example.com / member123 (atau email member lainnya)');
+  console.log('\n');
 }
 
 main()

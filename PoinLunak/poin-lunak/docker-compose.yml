@@ -1,0 +1,63 @@
+services:
+  # MySQL Database
+  db:
+    image: mysql:8.0
+    container_name: poinlunak-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: poin_lunak
+      MYSQL_USER: poinlunak
+      MYSQL_PASSWORD: poinlunak123
+    ports:
+      - "3307:3306"  # Changed to 3307 to avoid conflict with local MySQL
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - poinlunak-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-prootpassword"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # Next.js Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: poinlunak-app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: mysql://poinlunak:poinlunak123@db:3306/poin_lunak
+      JWT_SECRET: your-super-secret-jwt-key-change-this-in-production
+      NODE_ENV: production
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - poinlunak-network
+
+  # Prisma Migration Runner (runs once then exits)
+  migrate:
+    build:
+      context: .
+      dockerfile: Dockerfile.migrate
+    container_name: poinlunak-migrate
+    environment:
+      DATABASE_URL: mysql://poinlunak:poinlunak123@db:3306/poin_lunak
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - poinlunak-network
+
+volumes:
+  mysql_data:
+
+networks:
+  poinlunak-network:
+    driver: bridge

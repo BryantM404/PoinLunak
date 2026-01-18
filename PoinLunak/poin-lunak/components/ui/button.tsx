@@ -1,4 +1,3 @@
-// Button component with variants
 
 'use client';
 
@@ -17,21 +16,18 @@ export function Button({
   children,
   ...props
 }: ButtonProps) {
-  const baseStyles = 'font-semibold rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed';
-  
+  const baseStyles = 'rounded-md font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none border';
   const variants = {
-    primary: 'bg-[#DDBA72] text-[#6B3E1D] hover:bg-[#c9a860]',
-    secondary: 'bg-[#6B3E1D] text-white hover:bg-[#5a3318]',
-    outline: 'border-2 border-[#DDBA72] text-[#6B3E1D] hover:bg-[#DDBA72]/10',
-    danger: 'bg-red-600 text-white hover:bg-red-700',
+    primary: 'bg-white text-[#6B3E1D] border-[#6B3E1D] hover:bg-[#f3e7d1] hover:border-[#DDBA72] active:bg-[#f3e7d1] active:border-[#c9a860]',
+    secondary: 'bg-[#f3f4f6] text-[#6B3E1D] border-[#d1d5db] hover:bg-[#e5e7eb] hover:border-[#bfc3c9] active:bg-[#d1d5db] active:border-[#a3a8b0]',
+    outline: 'bg-white text-[#6B3E1D] border-[#6B3E1D] hover:bg-[#f3e7d1] hover:border-[#DDBA72] active:bg-[#f3e7d1] active:border-[#c9a860]',
+    danger: 'bg-[#6B3E1D] text-white border-[#6B3E1D] hover:bg-[#4e2710] hover:border-[#4e2710] active:bg-[#4e2710] active:border-[#4e2710]',
   };
-  
   const sizes = {
     sm: 'px-3 py-1.5 text-sm',
     md: 'px-4 py-2 text-base',
-    lg: 'px-6 py-3 text-lg',
+    lg: 'px-5 py-2.5 text-lg',
   };
-
   return (
     <button
       className={cn(baseStyles, variants[variant], sizes[size], className)}

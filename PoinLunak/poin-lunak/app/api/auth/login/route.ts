@@ -26,7 +26,7 @@ export async function POST(request: Request) {
     }
 
     // Check if account is active
-    if (user.status !== 'active') {
+    if (user.status !== 'ACTIVE') {
       return NextResponse.json<ApiResponse>(
         { success: false, error: 'Akun tidak aktif' },
         { status: 403 }

@@ -6,11 +6,8 @@ export interface User {
   email: string;
   password: string;
   role: string | null;
-  phone: string | null;
-  address: string | null;
   join_date: Date | null;
   points: number;
-  membership_level: string | null;
   status: string | null;
   created_at: Date;
 }
@@ -66,8 +63,7 @@ export interface RegisterData {
   name: string;
   email: string;
   password: string;
-  phone?: string;
-  address?: string;
+  confirmPassword: string;
 }
 
 // Dashboard Stats types

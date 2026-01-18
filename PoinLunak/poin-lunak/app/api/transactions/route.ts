@@ -23,8 +23,9 @@ export async function POST(request: Request) {
     // Validate input
     const validatedData = transactionSchema.parse(body);
 
-    // Calculate points: 1 point per 1000 rupiah (floored)
-    const pointsGained = calculatePoints(validatedData.total_transaction);
+    // Points ratio is now managed via localStorage in frontend (default: Rp 1.000 = 1 Poin)
+    // Calculate points using default: 1 point per 1000 rupiah
+    const pointsGained = Math.floor(validatedData.total_transaction / 1000);
 
     // Create transaction
     const transaction = await prisma.transactions.create({
@@ -47,22 +48,7 @@ export async function POST(request: Request) {
       },
     });
 
-    // Determine and update membership level
-    const newLevel = getMembershipLevel(updatedUser.points);
-    if (newLevel !== updatedUser.membership_level) {
-      await prisma.users.update({
-        where: { id: validatedData.users_id },
-        data: { membership_level: newLevel },
-      });
-
-      // Log membership level change
-      await prisma.membership_logs.create({
-        data: {
-          users_id: validatedData.users_id,
-          activity: `Naik ke level ${newLevel}`,
-        },
-      });
-    }
+    // Membership levels removed - no level updates needed
 
     // Create membership log
     await prisma.membership_logs.create({
@@ -131,13 +117,11 @@ export async function GET(request: Request) {
             id: true,
             name: true,
             email: true,
-            phone: true,
             points: true,
-            membership_level: true,
           },
         },
       },
-      orderBy: { created_at: 'desc' },
+      orderBy: { id: 'desc' },
     });
 
     return NextResponse.json<ApiResponse>(

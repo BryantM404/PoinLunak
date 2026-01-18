@@ -15,6 +15,7 @@ export default function RegisterPage() {
     name: '',
     email: '',
     password: '',
+    confirmPassword: '',
   });
   const [loading, setLoading] = useState(false);
 
@@ -53,7 +54,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center text-black justify-center bg-gradient-to-br from-[#DDBA72] to-[#6B3E1D] p-4">
+    <div className="min-h-screen flex items-center text-black justify-center bg-white p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
           <div className="text-center mb-4">
@@ -98,6 +99,15 @@ export default function RegisterPage() {
               placeholder="Min. 6 karakter"
               required
             />
+            <Input
+              type="password"
+              name="confirmPassword"
+              label="Konfirmasi Password"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              placeholder="Ulangi password"
+              required
+            />
             <Button
               type="submit"
               variant="primary"
@@ -111,12 +121,12 @@ export default function RegisterPage() {
           <div className="mt-6 text-center">
             <p className="text-sm text-black">
               Sudah punya akun?{' '}
-              <button
-                onClick={() => router.push('/login')}
+                <a
+                href="/login"
                 className="text-[#6B3E1D] font-semibold hover:underline"
-              >
+                >
                 Login di sini
-              </button>
+                </a>
             </p>
           </div>
         </CardContent>

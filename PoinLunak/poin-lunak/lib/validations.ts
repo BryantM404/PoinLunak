@@ -1,5 +1,3 @@
-// Zod validation schemas for API input validation
-
 import { z } from 'zod';
 
 export const loginSchema = z.object({
@@ -11,8 +9,10 @@ export const registerSchema = z.object({
   name: z.string().min(2, 'Nama minimal 2 karakter'),
   email: z.string().email('Email tidak valid'),
   password: z.string().min(6, 'Password minimal 6 karakter'),
-  phone: z.string().optional(),
-  address: z.string().optional(),
+  confirmPassword: z.string().min(6, 'Konfirmasi password minimal 6 karakter'),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: 'Password tidak cocok',
+  path: ['confirmPassword'],
 });
 
 export const transactionSchema = z.object({
@@ -29,8 +29,6 @@ export const redeemRewardSchema = z.object({
 
 export const updateProfileSchema = z.object({
   name: z.string().min(2, 'Nama minimal 2 karakter').optional(),
-  phone: z.string().optional(),
-  address: z.string().optional(),
 });
 
 export const manualPointAdjustmentSchema = z.object({

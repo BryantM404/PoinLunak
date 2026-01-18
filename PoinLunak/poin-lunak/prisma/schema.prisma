@@ -19,16 +19,14 @@ model users {
   email            String    @unique
   password         String
   role             String?
-  phone            String?
-  address          String?
   join_date        DateTime?
   points           Int        @default(0)
-  membership_level String?
   status           String?    @default("active")
   created_at       DateTime   @default(now())
 
   transactions     transactions[]
   rewards          rewards[]
+  redemptions      redemption_history[]
   membership_logs  membership_logs[]
 }
 
@@ -43,18 +41,47 @@ model transactions {
   users_id          Int
   user              users      @relation(fields: [users_id], references: [id])
 }
+model reward_items {
+  id               Int       @id @default(autoincrement())
+  name             String
+  description      String?
+  points_required  Int       // Poin yang diperlukan untuk menukar
+  stock            Int       @default(0) // Jumlah stok voucher tersedia
+  validity_days    Int       @default(30) // Masa berlaku voucher dalam hari setelah ditukar
+  status           String?   @default("ACTIVE") // ACTIVE atau INACTIVE
+  created_at       DateTime  @default(now())
+  updated_at       DateTime  @updatedAt
 
+  rewards          rewards[]
+}
+
+// Tabel untuk mencatat voucher yang sudah ditukar dari poin
 model rewards {
   id               Int       @id @default(autoincrement())
-  reward_name      String
-  points_required  Int
-  redeemed_at      DateTime?
-  status           String?    @default("available")
-  code             String?
-  created_at       DateTime   @default(now())
+  reward_item_id   Int       // FK ke reward_items (voucher apa)
+  users_id         Int       // Siapa yang ditukar
+  code             String    @unique // Kode unik voucher (VOUCHER-xxx)
+  status           String?   @default("ACTIVE") // ACTIVE, USED, EXPIRED
+  exchanged_at     DateTime  @default(now()) // Kapan poin ditukar jadi voucher
+  expires_at       DateTime  // Kapan voucher kadaluarsa
+  created_at       DateTime  @default(now())
 
-  users_id         Int
-  user             users      @relation(fields: [users_id], references: [id])
+  reward_item      reward_items @relation(fields: [reward_item_id], references: [id])
+  user             users @relation(fields: [users_id], references: [id])
+  redemptions      redemption_history[]
+}
+
+// Tabel untuk mencatat penggunaan/pemukaian voucher
+model redemption_history {
+  id               Int       @id @default(autoincrement())
+  rewards_id       Int       // FK ke rewards (voucher yang dipakai)
+  users_id         Int       // Siapa yang pakai
+  redeemed_at      DateTime  @default(now()) // Kapan voucher dipakai
+  transaction_ref  String?   // Referensi transaksi kasir (optional)
+  created_at       DateTime  @default(now())
+
+  reward           rewards @relation(fields: [rewards_id], references: [id])
+  user             users @relation(fields: [users_id], references: [id])
 }
 
 model membership_logs {
@@ -63,5 +90,16 @@ model membership_logs {
   activity_time    DateTime   @default(now())
 
   users_id         Int
-  user             users      @relation(fields: [users_id], references: [id])
+  user              users      @relation(fields: [users_id], references: [id])
+}
+
+// Tabel untuk menyimpan rasio poin
+model points_ratio {
+  id               Int       @id @default(autoincrement())
+  amount           Decimal   @db.Decimal(10,2) // Jumlah uang (misal 1000)
+  points           Int       // Jumlah poin yang didapat
+  description      String?   // Deskripsi (misal "Rp 1.000 = 1 Poin")
+  is_active        Boolean   @default(true) // Apakah rasio ini aktif
+  created_at       DateTime  @default(now())
+  updated_at       DateTime  @updatedAt
 }

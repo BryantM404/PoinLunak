@@ -19,6 +19,17 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const userId = searchParams.get('id');
 
+    // If no userId provided, return current user info (for both admin and members)
+    if (!userId) {
+      return NextResponse.json<ApiResponse>(
+        {
+          success: true,
+          data: currentUser,
+        },
+        { status: 200 }
+      );
+    }
+
     // If userId provided, get specific user
     if (userId) {
       // Only allow admins or the user themselves
@@ -36,11 +47,8 @@ export async function GET(request: Request) {
           name: true,
           email: true,
           role: true,
-          phone: true,
-          address: true,
           join_date: true,
           points: true,
-          membership_level: true,
           status: true,
           created_at: true,
         },
@@ -76,11 +84,8 @@ export async function GET(request: Request) {
         name: true,
         email: true,
         role: true,
-        phone: true,
-        address: true,
         join_date: true,
         points: true,
-        membership_level: true,
         status: true,
         created_at: true,
       },

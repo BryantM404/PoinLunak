@@ -1,9 +1,11 @@
 import type { NextConfig } from "next";
-import path from "path";
 
 const nextConfig: NextConfig = {
   /* config options here */
-  outputFileTracingRoot: path.join(__dirname, "../../"),
+  output: "standalone", // Required for Docker deployment
+  // Note: outputFileTracingRoot removed for Docker compatibility
+  // If running locally with monorepo, you may need to add it back:
+  // outputFileTracingRoot: path.join(__dirname, "../../"),
 };
 
 export default nextConfig;
