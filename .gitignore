@@ -1,0 +1,11 @@
+﻿# Large files
+*.rar
+*.zip
+*.7z
+
+# Node modules
+node_modules/
+
+# Environment files
+.env
+.env.local
