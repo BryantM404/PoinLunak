@@ -138,9 +138,16 @@ export async function GET() {
       redeemed: redeemedMap.get(date) || 0,
     }));
 
+    const pointRatio =
+    pointsRedeemed._sum.points_required && pointsIssued._sum.points_gained
+    ? pointsRedeemed._sum.points_required / pointsIssued._sum.points_gained
+    : 0;
+
+
     const stats: AdminStats = {
       totalUsers,
       totalTransactions,
+      pointRatio,
       totalPointsIssued: pointsIssued._sum.points_gained || 0,
       totalPointsRedeemed: totalPointsRedeemed,
       transactionsPerDay,

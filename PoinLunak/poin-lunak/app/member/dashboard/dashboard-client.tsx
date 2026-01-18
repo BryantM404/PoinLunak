@@ -1,5 +1,3 @@
-// Member Dashboard Client Component
-
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -12,7 +10,6 @@ import { VoucherCard } from '@/components/voucher-card';
 import { formatCurrency, formatDateTime } from '@/lib/utils';
 import type { SafeUser, Transaction, Reward } from '@/lib/types';
 
-// Serialized types for client components (dates as strings)
 type SerializedUser = Omit<SafeUser, 'join_date' | 'created_at'> & {
   join_date: string | null;
   created_at: string;

@@ -1,5 +1,3 @@
-// Register Page
-
 'use client';
 
 import { useState } from 'react';
@@ -30,6 +28,18 @@ export default function RegisterPage() {
     e.preventDefault();
     setLoading(true);
 
+    if (formData.password !== formData.confirmPassword) {
+      toast.error("Password dan konfirmasi password tidak sama!");
+      setLoading(false);
+      return;
+    }
+
+    if (formData.password.length < 6) {
+      toast.error("Password minimal 6 karakter");
+      setLoading(false);
+      return;
+    }
+
     try {
       const response = await fetch('/api/auth/register', {
         method: 'POST',
@@ -40,7 +50,7 @@ export default function RegisterPage() {
       const data = await response.json();
 
       if (data.success) {
-        toast.success('Registrasi berhasil! 🎉');
+        toast.success('Registrasi berhasil!');
         router.push('/member/dashboard');
       } else {
         toast.error(data.error || 'Registrasi gagal');
@@ -97,15 +107,6 @@ export default function RegisterPage() {
               value={formData.password}
               onChange={handleChange}
               placeholder="Min. 6 karakter"
-              required
-            />
-            <Input
-              type="password"
-              name="confirmPassword"
-              label="Konfirmasi Password"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              placeholder="Ulangi password"
               required
             />
             <Button
